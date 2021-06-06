@@ -6,6 +6,8 @@ const logger = require("./config/logger");
 let server;
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Create Mongo connection and get the express app to listen on config.port
+mongoose.connect(config.mongoose.url, {useNewUrlParser: true,useUnifiedTopology: true});
+app.listen(config.port,()=>logger.info(`Server started at ${config.port}`));
 
 // ------------- Don't Modify  -------------
 const exitHandler = () => {

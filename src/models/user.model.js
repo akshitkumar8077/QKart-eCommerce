@@ -13,9 +13,20 @@ const userSchema = mongoose.Schema(
       trim: true,
     },
     email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
+      validate: (value)=>{
+        return validator.isEmail(value);
+      }
     },
     password: {
       type: String,
+      required: true,
+      trim: true,
+      minlength: 8,
       validate(value) {
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error(
@@ -25,6 +36,9 @@ const userSchema = mongoose.Schema(
       },
     },
     walletMoney: {
+      type: Number,
+      required: true,
+      default: 500
     },
     address: {
       type: String,
@@ -44,6 +58,8 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
+  const data = await this.findOne({email:email});
+  return (data!=null)? true: false;
 };
 
 
@@ -54,6 +70,7 @@ userSchema.statics.isEmailTaken = async function (email) {
  * Note: The model should be accessible in a different module when imported like below
  * const User = require("<user.model file path>").User;
  */
+module.exports.User = mongoose.model('User',userSchema);
 /**
  * @typedef User
  */

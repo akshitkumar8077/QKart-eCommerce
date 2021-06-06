@@ -9,6 +9,11 @@ const ApiError = require("../utils/ApiError");
  * @param {String} id
  * @returns {Promise<User>}
  */
+const getUserById = async (id)=>{
+    const data = await User.findOne({_id:id});
+    return data; 
+}
+
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
 /**
@@ -17,7 +22,10 @@ const ApiError = require("../utils/ApiError");
  * @param {string} email
  * @returns {Promise<User>}
  */
-
+const getUserByEmail = async (email) =>{
+    const data = await User.findOne({email:email});
+    return data;
+}
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
  * Create a user
@@ -40,5 +48,19 @@ const ApiError = require("../utils/ApiError");
  *
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
+const createUser = async (user) =>{
+    if(User.isEmailTaken(user.email)){
+        throw new ApiError(httpStatus["200_MESSAGE"], "Email already taken");
+    }
+    else{
+        const data = await User.create(user);
+        return data;
+    }
+}
 
+module.exports = {
+    getUserByEmail,
+    getUserById,
+    createUser
+};
 
