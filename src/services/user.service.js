@@ -10,7 +10,7 @@ const ApiError = require("../utils/ApiError");
  * @returns {Promise<User>}
  */
 const getUserById = async (id)=>{
-    const data = await User.findOne({_id:id});
+    const data =  User.findOne({_id:id});
     return data; 
 }
 
