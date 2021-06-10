@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const config = require("../config/config");
-
+SALT_WORK_FACTOR = 10;
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Complete userSchema, a Mongoose schema for "users" collection
 const userSchema = mongoose.Schema(
   {
@@ -51,6 +51,24 @@ const userSchema = mongoose.Schema(
   }
 );
 
+
+userSchema.pre('save', function(next){ 
+  const user = this;
+  // only hash the password if it has been modified (or is new)
+  if (!user.isModified('password')) return next();
+  
+  // generate a salt
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if (err) return next(err);
+    // hash the password along with our new salt
+    bcrypt.hash(user.password, salt, function(err, hash) {
+      if (err) return next(err);
+      // override the cleartext password with the hashed one
+      user.password = hash;
+      next();
+  });
+});
+});
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement the isEmailTaken() static method
 /**
  * Check if email is taken
@@ -58,8 +76,19 @@ const userSchema = mongoose.Schema(
  * @returns {Promise<boolean>}
  */
 userSchema.statics.isEmailTaken = async function (email) {
-  const data = await this.findOne({email:email});
-  return (data!=null)? true: false;
+  const data = await this.findOne({"email":email});
+  return (data!=null);
+};
+
+
+
+/**
+ * Check if entered password matches the user's password
+ * @param {string} password
+ * @returns {Promise<boolean>}
+ */
+userSchema.methods.isPasswordMatch = async function (password) {
+  return bcrypt.compare(password, this.password);
 };
 
 
