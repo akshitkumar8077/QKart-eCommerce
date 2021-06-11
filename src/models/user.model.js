@@ -99,7 +99,6 @@ userSchema.methods.isPasswordMatch = async function (password) {
  * Note: The model should be accessible in a different module when imported like below
  * const User = require("<user.model file path>").User;
  */
+
 module.exports.User = mongoose.model('User',userSchema);
-/**
- * @typedef User
- */
+

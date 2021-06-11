@@ -12,4 +12,11 @@ router.get('/:userId',auth(),validate(userValidation.getUser),userController.get
 
 
 
+router.put(
+  "/:userId",
+  auth(),
+  validate(userValidation.setAddress),
+  userController.setAddress
+);
+
 module.exports = router;
