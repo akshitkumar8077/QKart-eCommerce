@@ -27,6 +27,11 @@ const getUserByEmail = async (email) =>{
     return data;}
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
+
+/**
+ * Create a user
+ *  - check if the user with the email already exists using `User.isEmailTaken()` method
+ *  - If so throw an error using the `ApiError` class. Pass two arguments to the constructor,
  *    1. “200 OK status code using `http-status` library
  *    2. An error message, “Email already taken”
  *  - Otherwise, create and return a new User object

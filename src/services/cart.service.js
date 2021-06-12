@@ -2,7 +2,7 @@ const httpStatus = require("http-status");
 const { Cart, Product } = require("../models");
 const ApiError = require("../utils/ApiError");
 const config = require("../config/config");
-
+const { userService } = require("../services");
 // TODO: CRIO_TASK_MODULE_CART - Implement the Cart service methods
 
 /**
@@ -156,9 +156,33 @@ const deleteProductFromCart = async (user, productId) => {
 };
 
 
+
+// TODO: CRIO_TASK_MODULE_TEST - Implement checkout function
+/**
+ * Checkout a users cart.
+ * On success, users cart must have no products.
+ *
+ * @param {User} user
+ * @returns {Promise}
+ * @throws {ApiError} when cart is invalid
+ */
+const checkout = async (user) => {
+  var cart = await getCartByUser(user);
+  if(cart.cartItems.length==0) throw new ApiError(httpStatus.BAD_REQUEST,"No Product Found");
+
+  if(!(await user.hasSetNonDefaultAddress())) throw new ApiError(httpStatus.BAD_REQUEST,"Address Not set");
+
+  if(user.walletMoney==0) throw new ApiError(httpStatus.BAD_REQUEST,"Insufficient Balance");
+  user.walletMoney = 0;
+  cart.cartItems=[];
+  cart.save();
+  user.save();
+};
+
 module.exports = {
   getCartByUser,
   addProductToCart,
   updateProductInCart,
   deleteProductFromCart,
+  checkout,
 };
