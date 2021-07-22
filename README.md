@@ -1,9 +1,5 @@
 # QKart-eCommerce
-#### - an online e-commerce store;
-#### - MERN-Stack Based Web application;
-#### - a set of REST API’s in backend;
-#### - Added Password Authentication and Token authentication using JWT Tokens; 
-#### - has Implementation of end-to-end checkout experience to enable users to place order.
+
 #### - Project is Deployed [*Here*](https://super-cool-site-by-jaskaran.netlify.app/)
 
 ## _Application Screenshots_
